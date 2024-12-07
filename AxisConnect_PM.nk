@@ -1,0 +1,69 @@
+#! /Applications/Nuke15.1v4/Nuke15.1v4.app/Contents/MacOS/libnuke-15.1.4.dylib -nx
+version 15.1 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="25" w="1440" h="800" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="777" stretch="1"/>
+            <splitter orientation="2">
+                <split size="458"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="322"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/g/Desktop/AxisConnect_PM.nk
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement OCIO
+ OCIO_config custom
+ customOCIOConfigPath /Users/g/.nuke/color/OCIOConfigs/configs/aces_1.2/config.ocio
+ defaultViewerLUT "OCIO LUTs"
+ workingSpaceLUT scene_linear
+ monitorLut "sRGB (ACES)"
+ monitorOutLUT "Rec.709 (ACES)"
+ int8Lut matte_paint
+ int16Lut texture_paint
+ logLut compositing_log
+ floatLut scene_linear
+}
+NoOp {
+ inputs 0
+ name AxisConnect_PM
+ tile_color 0xffff00ff
+ selected true
+ xpos 494
+ ypos 39
+ hide_input true
+ addUserKnob {20 User l AxisConnect_PM}
+ addUserKnob {2 file l AxisToRender}
+ file /Users/g/Desktop/AxisToRender.tcl
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "" +STARTLINE T "1, Select all Axis / 2, Push:"}
+ addUserKnob {22 AxisConnect -STARTLINE T "import nuke\n\n# Get the current Nuke node (for obtaining file path from 'file' knob)\nref_node = nuke.thisNode()\n# Get the input parameters from the node\nfile = ref_node\['file'].getValue()\n\n# Path to the Group.tcl file\ngroup_file_path = file\n\n# Step 1: Create the AxisToRender nodes from the file and organize them\ndef create_axis_to_render_from_file(file):\n    # Paste the group node from the TCL file\n    nuke.nodePaste(file)\n    # Return the newly created node\n    return nuke.selectedNode()  # Returns the most recently pasted node\n\ndef organize_connect_and_scene():\n    # Step 1: Track the selected Axis3 nodes\n    selected_nodes = \[node for node in nuke.selectedNodes() if node.Class() == \"Axis3\"]\n\n    if not selected_nodes:\n        nuke.message(\"No Axis3 nodes selected. Please select Axis3 nodes to connect.\")\n        return \[]\n\n    # Step 2: Organize the Axis3 nodes horizontally\n    organize_nodes_horizontally(selected_nodes)\n\n    # List to store all newly created AxisToRender nodes\n    axis_to_render_nodes = \[]\n\n    # Step 3: Create and connect AxisToRender nodes below each Axis3 node\n    vertical_spacing = 100  # Distance between Axis3 and AxisToRender nodes\n    for axis in selected_nodes:\n        # Create AxisToRender node from the group file (use the global 'group_file_path')\n        group_node = create_axis_to_render_from_file(group_file_path)\n\n        # Position the AxisToRender node directly below the Axis3 node\n        group_node.setXYpos(axis.xpos(), axis.ypos() + vertical_spacing)\n\n        # Connect the Axis3 node to the AxisToRender node\n        group_node.setInput(0, axis)\n\n        # Add the new group node to the list\n        axis_to_render_nodes.append(group_node)\n\n        # Log the connection\n        #print(f\"Connected \{axis.name()\} to \{group_node.name()\}\")\n\n    # Step 4: Connect all AxisToRender nodes to a Scene3D node\n    connect_to_scene3d(axis_to_render_nodes)\n\n    # Completion message\n    #nuke.message(f\"Successfully connected and organized \{len(selected_nodes)\} Axis3 nodes.\")\n\n    return axis_to_render_nodes  # Return the created AxisToRender nodes\n\n\ndef create_ctrl_node():\n    # Check if a node named 'CTRL' already exists\n    existing_ctrl_nodes = \[node for node in nuke.allNodes() if node\['name'].value() == 'CTRL']\n    \n    # Create a NoOp node and set a unique name\n    ctrl_node_name = 'CTRL'\n    if existing_ctrl_nodes:\n        # If a node named 'CTRL' exists, find the next available name (e.g., CTRL1, CTRL2, etc.)\n        i = 1\n        while any(node\['name'].value() == f'CTRL\{i\}' for node in nuke.allNodes()):\n            i += 1\n        ctrl_node_name = f'CTRL\{i\}'\n    \n    # Create the NoOp node with the determined name\n    ctrl_node = nuke.createNode('NoOp')\n    ctrl_node\['name'].setValue(ctrl_node_name)\n    \n    # Add a floating point slider (Double_Knob) inside the NoOp node with the name 'size'\n    size_knob = nuke.Double_Knob('size', 'size')\n    ctrl_node.addKnob(size_knob)\n    \n    # Set the min and max values of the slider\n    size_knob.setRange(1, 5)\n    \n    # Optionally, you can set a default value for the slider\n    size_knob.setValue(5)  # Default value for the slider\n    \n    # Set the color of the node to yellow (0xFFFF00FF)\n    ctrl_node\['tile_color'].setValue(0xFFFF00FF)\n    \n    return ctrl_node\n\n\ndef set_uniform_scale_expression(axis_to_render_nodes):\n    # Find the 'CTRL' node (or the most recent one created)\n    ctrl_node = None\n    for node in nuke.allNodes():\n        if node\['name'].value().startswith('CTRL'):\n            ctrl_node = node\n            break  # We found the first CTRL node, no need to continue\n\n    if ctrl_node:\n        # Set the expression for the 'uniform_scale' knob to reference the 'size' knob of the CTRL node\n        for axis_to_render_node in axis_to_render_nodes:\n            if 'uniform_scale' in axis_to_render_node.knobs():\n                axis_to_render_node\['uniform_scale'].setExpression(f\"\{ctrl_node.name()\}.size\")\n                #print(f\"Set uniform_scale expression for \{axis_to_render_node.name()\} to \{ctrl_node.name()\}.size\")\n            else:\n                print(f\"uniform_scale knob not found in \{axis_to_render_node.name()\}\")\n    else:\n        print(\"CTRL node not found.\")\n\n# Function to organize nodes horizontally\ndef organize_nodes_horizontally(nodes):\n    # Define horizontal spacing\n    spacing = 150\n\n    # Sort nodes by their x-position to maintain relative order\n    nodes.sort(key=lambda node: node.xpos())\n\n    # Start organizing nodes horizontally\n    x_position = nodes\[0].xpos()  # Start at the x-position of the first node\n    y_position = nodes\[0].ypos()  # Keep the y-position consistent\n\n    for node in nodes:\n        node.setXYpos(int(x_position), int(y_position))\n        x_position += spacing  # Move to the right by the spacing value\n\n    #print(\"Axis3 nodes have been organized horizontally.\")\n\n# Function to connect all AxisToRender nodes to a Scene3D node\ndef connect_to_scene3d(axis_to_render_nodes):\n    # Create a unique Scene3D node\n    scene_node_name = \"Scene1\"\n    i = 1\n    while any(node.Class() == \"Scene\" and node\['name'].value() == scene_node_name for node in nuke.allNodes()):\n        i += 1\n        scene_node_name = f\"Scene\{i\}\"\n\n    scene_node = nuke.createNode(\"Scene\")\n    scene_node\['name'].setValue(scene_node_name)\n    #print(f\"Created a new \{scene_node_name\} node.\")\n\n    # Position the Scene3D node below the AxisToRender nodes\n    if axis_to_render_nodes:\n        first_axis = axis_to_render_nodes\[0]\n        scene_node.setXYpos(first_axis.xpos(), first_axis.ypos() + 200)\n\n    # Connect each AxisToRender node to the Scene3D node\n    for i, axis_to_render in enumerate(axis_to_render_nodes):\n        scene_node.setInput(i, axis_to_render)\n        #print(f\"Connected \{axis_to_render.name()\} to \{scene_node_name\} input \{i\}\")\n\n# Main function to execute the entire workflow\ndef main():\n    # Step 1: Create and organize AxisToRender nodes\n    axis_to_render_nodes = organize_connect_and_scene()\n\n    # Step 2: Only create the CTRL node if Axis3 nodes were selected\n    if axis_to_render_nodes:  # Check if any Axis3 nodes were selected\n        create_ctrl_node()\n\n    # Step 3: Set the uniform_scale expressions for the AxisToRender nodes\n    set_uniform_scale_expression(axis_to_render_nodes)\n\n# Run the combined function\nmain()\n"}
+ addUserKnob {26 ""}
+ addUserKnob {26 _0 l "" +STARTLINE T "AxisConnect_PM v1.01 by Peter Mercell / 2024\nAxisToRender by Gaetan Baldy"}
+ addUserKnob {26 _2 l "" +STARTLINE T "<a style=\"color: #999999;\"><a style=\"color: #999999;\" href=\"http://www.petermercell.com\" target=\"_blank\" rel=\"noopener\">www.petermercell.com</a>"}
+}
