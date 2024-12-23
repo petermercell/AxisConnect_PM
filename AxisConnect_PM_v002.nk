@@ -1,0 +1,859 @@
+#! /Applications/Nuke16.0v1-Beta.3/Nuke16.0v1-Beta.3.app/Contents/MacOS/libnuke-16.0.1.dylib -nx
+version 16.0 v1.253181b
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="25" w="1440" h="803" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="871" stretch="1"/>
+            <splitter orientation="2">
+                <split size="419"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="364"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="521"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="uk.co.thefoundry.scripteditor.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/g/Desktop/AxisConnect_PM_v002.nk
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement OCIO
+ OCIO_config custom
+ customOCIOConfigPath /Users/g/.nuke/color/OCIOConfigs/configs/aces_1.2/config.ocio
+ defaultViewerLUT "OCIO LUTs"
+ workingSpaceLUT scene_linear
+ monitorLut "sRGB (ACES)"
+ monitorOutLUT "Rec.709 (ACES)"
+ int8Lut matte_paint
+ int16Lut texture_paint
+ logLut compositing_log
+ floatLut scene_linear
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x388e8e00
+ note_font_size 42
+ xpos -352
+ ypos -507
+ bdwidth 307
+ bdheight 227
+}
+Axis4 {
+ inputs 0
+ translate {0 -76.5 115.5}
+ name Axis2
+ xpos -26
+ ypos -154
+}
+Group {
+ name AxisToRender3
+ knobChanged "node = nuke.thisNode()\nknob = nuke.thisKnob()\nif knob.name() in ('render', 'showPanel'):\n    mode = node\['render'].value()\n    if mode == 'Color':\n        node\['render_mode'].setValue(\"4\")\n    elif mode == 'Wireframe':\n        node\['render_mode'].setValue(\"1\")\n    elif mode == 'Color + Wireframe':\n        node\['render_mode'].setValue(\"5\")"
+ tile_color 0x7f7f7fff
+ xpos -26
+ ypos -54
+ addUserKnob {20 Settings l "Axis To Render"}
+ addUserKnob {68 Geo l "Geometry Choice" M {Star Cone ""}}
+ Geo Cone
+ addUserKnob {4 render l Render M {Color Wireframe "Color + Wireframe"}}
+ addUserKnob {41 render_mode l INVISIBLE +INVISIBLE T TransformGeo1.render_mode}
+ addUserKnob {18 Color}
+ Color {0.5 0 0.5}
+ addUserKnob {6 Color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {22 randomcolor l " Random Color " -STARTLINE T "import random\nn=nuke.thisNode()\nRed=random.uniform(0,1)\nGreen=random.uniform(0,1)\nBlue=random.uniform(0,1)\nn\['Color'].setValue(\[Red,Green,Blue])\nhexColour = int('%02x%02x%02x%02x' % (Red*255,Green*255,Blue*255,1),16)\nn\['tile_color'].setValue( hexColour )"}
+ addUserKnob {26 ""}
+ addUserKnob {26 S01 l " " T " "}
+ addUserKnob {41 scaling_1 l Scale T TransformGeo2.scaling}
+ addUserKnob {41 uniform_scale l "Uniform Scale" T TransformGeo1.uniform_scale}
+ addUserKnob {26 by1 l " " T " \n"}
+ addUserKnob {26 by2 l " " T "                                                                                               "}
+ addUserKnob {26 Gat l " " -STARTLINE T "<font color=\"#1C1C1C\"> v01 - Gat - 2017"}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output "\[value render]"
+}
+ Input {
+  inputs 0
+  name InputAxis
+  xpos 268
+  ypos 996
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.Color.r} {parent.Color.g} {parent.Color.b} 0}
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant1
+  xpos 267
+  ypos 838
+  postage_stamp false
+  addUserKnob {20 User}
+  addUserKnob {7 color_red}
+  addUserKnob {7 color_blue}
+  addUserKnob {7 color_gren}
+ }
+ Cylinder {
+  inputs 0
+  rows 0
+  name Cylinder1
+  xpos 637
+  ypos 653
+ }
+ EditGeo {
+  keys {{30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59}
+    }
+  values {{-2.980219849e-09 0 -0.9999957085 -0.2079108059 0 -0.978143394 -0.4067349136 0 -0.9135414958 -0.5877827406 0 -0.8090135455 -0.7431417108 0 -0.6691276431 -0.8660217524 0 -0.4999977946 -0.9510524869 0 -0.3090156317 -0.994517684 0 -0.1045279428 -0.994517684 0 0.1045280993 -0.9510524273 0 0.3090157509 -0.8660216928 0 0.4999979734 -0.7431416512 0 0.6691278815 -0.587782681 0 0.8090136647 -0.406734854 0 0.913541615 -0.2079107165 0 0.9781435132 8.44421848e-08 0 0.9999957681 0.2079108953 0 0.9781434536 0.406735003 0 0.9135415554 0.5877828598 0 0.8090135455 0.7431417108 0 0.6691277027 0.8660217524 0 0.4999978244 0.9510524273 0 0.3090158105 0.994517684 0 0.1045279279 0.9945176244 0 -0.1045283601 0.9510524273 0 -0.3090157807 0.8660217524 0 -0.499997735 0.7431415915 0 -0.6691278219 0.5877824426 0 -0.8090137839 0.4067347646 0 -0.913541615 0.2079108655 0 -0.9781433344}
+    }
+  translate {-1.986336512e-10 1 4.023313593e-08}
+  name EditGeo1
+  xpos 637
+  ypos 677
+ }
+ TransformGeo {
+  translate {0 -1 0}
+  rotate {0 0 180}
+  scaling {{parent.TransformGeo2.scaling.x} {parent.TransformGeo2.scaling.y} {parent.TransformGeo2.scaling.z}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  pivot_translate {0 1 0}
+  name TransformGeo3
+  xpos 637
+  ypos 701
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 90 0}
+  scaling {0.2 {1+TransformGeo2.scaling.y} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereX
+  xpos 321
+  ypos 477
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 0 0}
+  scaling {0.2 {1+TransformGeo2.scaling.z} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereZ
+  xpos 526
+  ypos 478
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  scaling {0.2 {1+TransformGeo2.scaling.x} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereY
+  xpos 426
+  ypos 476
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ MergeGeo {
+  inputs 3
+  selectable false
+  name MergeGeo1
+  xpos 426
+  ypos 540
+ }
+ Switch {
+  inputs 2
+  which {{Geo}}
+  name Switch1
+  label "\[value which]"
+  xpos 432
+  ypos 695
+ }
+ ApplyMaterial {
+  inputs 2
+  selectable false
+  name ApplyMaterial1
+  xpos 432
+  ypos 838
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  render_mode textured
+  uniform_scale {{CTRL1.size}}
+  name TransformGeo1
+  xpos 432
+  ypos 996
+ }
+set N64df9400 [stack 0]
+ Output {
+  name Output1
+  xpos 432
+  ypos 1069
+ }
+push $N64df9400
+ Viewer {
+  frame 152
+  frame_range 1-385
+  masking_ratio 1.85
+  name Viewer1
+  xpos 432
+  ypos 1020
+ }
+ TransformGeo {
+  inputs 0
+  selectable false
+  render_mode textured
+  uniform_scale 5
+  name TransformGeo2
+  xpos 226
+  ypos 641
+  hide_input true
+ }
+end_group
+Axis3 {
+ inputs 0
+ translate {99.40000153 0 0}
+ name Axis1
+ xpos -176
+ ypos -154
+}
+Group {
+ name AxisToRender2
+ knobChanged "node = nuke.thisNode()\nknob = nuke.thisKnob()\nif knob.name() in ('render', 'showPanel'):\n    mode = node\['render'].value()\n    if mode == 'Color':\n        node\['render_mode'].setValue(\"4\")\n    elif mode == 'Wireframe':\n        node\['render_mode'].setValue(\"1\")\n    elif mode == 'Color + Wireframe':\n        node\['render_mode'].setValue(\"5\")"
+ tile_color 0x7f7f7fff
+ xpos -176
+ ypos -54
+ addUserKnob {20 Settings l "Axis To Render"}
+ addUserKnob {68 Geo l "Geometry Choice" M {Star Cone ""}}
+ Geo Cone
+ addUserKnob {4 render l Render M {Color Wireframe "Color + Wireframe"}}
+ addUserKnob {41 render_mode l INVISIBLE +INVISIBLE T TransformGeo1.render_mode}
+ addUserKnob {18 Color}
+ Color {0.5 0 0.5}
+ addUserKnob {6 Color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {22 randomcolor l " Random Color " -STARTLINE T "import random\nn=nuke.thisNode()\nRed=random.uniform(0,1)\nGreen=random.uniform(0,1)\nBlue=random.uniform(0,1)\nn\['Color'].setValue(\[Red,Green,Blue])\nhexColour = int('%02x%02x%02x%02x' % (Red*255,Green*255,Blue*255,1),16)\nn\['tile_color'].setValue( hexColour )"}
+ addUserKnob {26 ""}
+ addUserKnob {26 S01 l " " T " "}
+ addUserKnob {41 scaling_1 l Scale T TransformGeo2.scaling}
+ addUserKnob {41 uniform_scale l "Uniform Scale" T TransformGeo1.uniform_scale}
+ addUserKnob {26 by1 l " " T " \n"}
+ addUserKnob {26 by2 l " " T "                                                                                               "}
+ addUserKnob {26 Gat l " " -STARTLINE T "<font color=\"#1C1C1C\"> v01 - Gat - 2017"}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output "\[value render]"
+}
+ Input {
+  inputs 0
+  name InputAxis
+  xpos 268
+  ypos 996
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.Color.r} {parent.Color.g} {parent.Color.b} 0}
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant1
+  xpos 267
+  ypos 838
+  postage_stamp false
+  addUserKnob {20 User}
+  addUserKnob {7 color_red}
+  addUserKnob {7 color_blue}
+  addUserKnob {7 color_gren}
+ }
+ Cylinder {
+  inputs 0
+  rows 0
+  name Cylinder1
+  xpos 637
+  ypos 653
+ }
+ EditGeo {
+  keys {{30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59}
+    }
+  values {{-2.980219849e-09 0 -0.9999957085 -0.2079108059 0 -0.978143394 -0.4067349136 0 -0.9135414958 -0.5877827406 0 -0.8090135455 -0.7431417108 0 -0.6691276431 -0.8660217524 0 -0.4999977946 -0.9510524869 0 -0.3090156317 -0.994517684 0 -0.1045279428 -0.994517684 0 0.1045280993 -0.9510524273 0 0.3090157509 -0.8660216928 0 0.4999979734 -0.7431416512 0 0.6691278815 -0.587782681 0 0.8090136647 -0.406734854 0 0.913541615 -0.2079107165 0 0.9781435132 8.44421848e-08 0 0.9999957681 0.2079108953 0 0.9781434536 0.406735003 0 0.9135415554 0.5877828598 0 0.8090135455 0.7431417108 0 0.6691277027 0.8660217524 0 0.4999978244 0.9510524273 0 0.3090158105 0.994517684 0 0.1045279279 0.9945176244 0 -0.1045283601 0.9510524273 0 -0.3090157807 0.8660217524 0 -0.499997735 0.7431415915 0 -0.6691278219 0.5877824426 0 -0.8090137839 0.4067347646 0 -0.913541615 0.2079108655 0 -0.9781433344}
+    }
+  translate {-1.986336512e-10 1 4.023313593e-08}
+  name EditGeo1
+  xpos 637
+  ypos 677
+ }
+ TransformGeo {
+  translate {0 -1 0}
+  rotate {0 0 180}
+  scaling {{parent.TransformGeo2.scaling.x} {parent.TransformGeo2.scaling.y} {parent.TransformGeo2.scaling.z}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  pivot_translate {0 1 0}
+  name TransformGeo3
+  xpos 637
+  ypos 701
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 90 0}
+  scaling {0.2 {1+TransformGeo2.scaling.y} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereX
+  xpos 321
+  ypos 477
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 0 0}
+  scaling {0.2 {1+TransformGeo2.scaling.z} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereZ
+  xpos 526
+  ypos 478
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  scaling {0.2 {1+TransformGeo2.scaling.x} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereY
+  xpos 426
+  ypos 476
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ MergeGeo {
+  inputs 3
+  selectable false
+  name MergeGeo1
+  xpos 426
+  ypos 540
+ }
+ Switch {
+  inputs 2
+  which {{Geo}}
+  name Switch1
+  label "\[value which]"
+  xpos 432
+  ypos 695
+ }
+ ApplyMaterial {
+  inputs 2
+  selectable false
+  name ApplyMaterial1
+  xpos 432
+  ypos 838
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  render_mode textured
+  uniform_scale {{CTRL1.size}}
+  name TransformGeo1
+  xpos 432
+  ypos 996
+ }
+set N649fb200 [stack 0]
+ Output {
+  name Output1
+  xpos 432
+  ypos 1069
+ }
+push $N649fb200
+ Viewer {
+  frame 152
+  frame_range 1-385
+  masking_ratio 1.85
+  name Viewer1
+  xpos 432
+  ypos 1020
+ }
+ TransformGeo {
+  inputs 0
+  selectable false
+  render_mode textured
+  uniform_scale 5
+  name TransformGeo2
+  xpos 226
+  ypos 641
+  hide_input true
+ }
+end_group
+Axis2 {
+ inputs 0
+ name Axis4
+ xpos -326
+ ypos -154
+}
+Group {
+ name AxisToRender1
+ knobChanged "node = nuke.thisNode()\nknob = nuke.thisKnob()\nif knob.name() in ('render', 'showPanel'):\n    mode = node\['render'].value()\n    if mode == 'Color':\n        node\['render_mode'].setValue(\"4\")\n    elif mode == 'Wireframe':\n        node\['render_mode'].setValue(\"1\")\n    elif mode == 'Color + Wireframe':\n        node\['render_mode'].setValue(\"5\")"
+ tile_color 0x7f7f7fff
+ xpos -326
+ ypos -54
+ addUserKnob {20 Settings l "Axis To Render"}
+ addUserKnob {68 Geo l "Geometry Choice" M {Star Cone ""}}
+ Geo Cone
+ addUserKnob {4 render l Render M {Color Wireframe "Color + Wireframe"}}
+ addUserKnob {41 render_mode l INVISIBLE +INVISIBLE T TransformGeo1.render_mode}
+ addUserKnob {18 Color}
+ Color {0.5 0 0.5}
+ addUserKnob {6 Color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {22 randomcolor l " Random Color " -STARTLINE T "import random\nn=nuke.thisNode()\nRed=random.uniform(0,1)\nGreen=random.uniform(0,1)\nBlue=random.uniform(0,1)\nn\['Color'].setValue(\[Red,Green,Blue])\nhexColour = int('%02x%02x%02x%02x' % (Red*255,Green*255,Blue*255,1),16)\nn\['tile_color'].setValue( hexColour )"}
+ addUserKnob {26 ""}
+ addUserKnob {26 S01 l " " T " "}
+ addUserKnob {41 scaling_1 l Scale T TransformGeo2.scaling}
+ addUserKnob {41 uniform_scale l "Uniform Scale" T TransformGeo1.uniform_scale}
+ addUserKnob {26 by1 l " " T " \n"}
+ addUserKnob {26 by2 l " " T "                                                                                               "}
+ addUserKnob {26 Gat l " " -STARTLINE T "<font color=\"#1C1C1C\"> v01 - Gat - 2017"}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output "\[value render]"
+}
+ Input {
+  inputs 0
+  name InputAxis
+  xpos 268
+  ypos 996
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.Color.r} {parent.Color.g} {parent.Color.b} 0}
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant1
+  xpos 267
+  ypos 838
+  postage_stamp false
+  addUserKnob {20 User}
+  addUserKnob {7 color_red}
+  addUserKnob {7 color_blue}
+  addUserKnob {7 color_gren}
+ }
+ Cylinder {
+  inputs 0
+  rows 0
+  name Cylinder1
+  xpos 637
+  ypos 653
+ }
+ EditGeo {
+  keys {{30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59}
+    }
+  values {{-2.980219849e-09 0 -0.9999957085 -0.2079108059 0 -0.978143394 -0.4067349136 0 -0.9135414958 -0.5877827406 0 -0.8090135455 -0.7431417108 0 -0.6691276431 -0.8660217524 0 -0.4999977946 -0.9510524869 0 -0.3090156317 -0.994517684 0 -0.1045279428 -0.994517684 0 0.1045280993 -0.9510524273 0 0.3090157509 -0.8660216928 0 0.4999979734 -0.7431416512 0 0.6691278815 -0.587782681 0 0.8090136647 -0.406734854 0 0.913541615 -0.2079107165 0 0.9781435132 8.44421848e-08 0 0.9999957681 0.2079108953 0 0.9781434536 0.406735003 0 0.9135415554 0.5877828598 0 0.8090135455 0.7431417108 0 0.6691277027 0.8660217524 0 0.4999978244 0.9510524273 0 0.3090158105 0.994517684 0 0.1045279279 0.9945176244 0 -0.1045283601 0.9510524273 0 -0.3090157807 0.8660217524 0 -0.499997735 0.7431415915 0 -0.6691278219 0.5877824426 0 -0.8090137839 0.4067347646 0 -0.913541615 0.2079108655 0 -0.9781433344}
+    }
+  translate {-1.986336512e-10 1 4.023313593e-08}
+  name EditGeo1
+  xpos 637
+  ypos 677
+ }
+ TransformGeo {
+  translate {0 -1 0}
+  rotate {0 0 180}
+  scaling {{parent.TransformGeo2.scaling.x} {parent.TransformGeo2.scaling.y} {parent.TransformGeo2.scaling.z}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  pivot_translate {0 1 0}
+  name TransformGeo3
+  xpos 637
+  ypos 701
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 90 0}
+  scaling {0.2 {1+TransformGeo2.scaling.y} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereX
+  xpos 321
+  ypos 477
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 0 0}
+  scaling {0.2 {1+TransformGeo2.scaling.z} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereZ
+  xpos 526
+  ypos 478
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  scaling {0.2 {1+TransformGeo2.scaling.x} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereY
+  xpos 426
+  ypos 476
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ MergeGeo {
+  inputs 3
+  selectable false
+  name MergeGeo1
+  xpos 426
+  ypos 540
+ }
+ Switch {
+  inputs 2
+  which {{Geo}}
+  name Switch1
+  label "\[value which]"
+  xpos 432
+  ypos 695
+ }
+ ApplyMaterial {
+  inputs 2
+  selectable false
+  name ApplyMaterial1
+  xpos 432
+  ypos 838
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  render_mode textured
+  uniform_scale {{CTRL1.size}}
+  name TransformGeo1
+  xpos 432
+  ypos 996
+ }
+set N1db7d600 [stack 0]
+ Output {
+  name Output1
+  xpos 432
+  ypos 1069
+ }
+push $N1db7d600
+ Viewer {
+  frame 152
+  frame_range 1-385
+  masking_ratio 1.85
+  name Viewer1
+  xpos 432
+  ypos 1020
+ }
+ TransformGeo {
+  inputs 0
+  selectable false
+  render_mode textured
+  uniform_scale 5
+  name TransformGeo2
+  xpos 226
+  ypos 641
+  hide_input true
+ }
+end_group
+Axis {
+ inputs 0
+ translate {-138 0 0}
+ name Axis3
+ xpos -476
+ ypos -154
+}
+Group {
+ name AxisToRender4
+ knobChanged "node = nuke.thisNode()\nknob = nuke.thisKnob()\nif knob.name() in ('render', 'showPanel'):\n    mode = node\['render'].value()\n    if mode == 'Color':\n        node\['render_mode'].setValue(\"4\")\n    elif mode == 'Wireframe':\n        node\['render_mode'].setValue(\"1\")\n    elif mode == 'Color + Wireframe':\n        node\['render_mode'].setValue(\"5\")"
+ tile_color 0x7f7f7fff
+ xpos -476
+ ypos -54
+ addUserKnob {20 Settings l "Axis To Render"}
+ addUserKnob {68 Geo l "Geometry Choice" M {Star Cone ""}}
+ Geo Cone
+ addUserKnob {4 render l Render M {Color Wireframe "Color + Wireframe"}}
+ addUserKnob {41 render_mode l INVISIBLE +INVISIBLE T TransformGeo1.render_mode}
+ addUserKnob {18 Color}
+ Color {0.5 0 0.5}
+ addUserKnob {6 Color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {22 randomcolor l " Random Color " -STARTLINE T "import random\nn=nuke.thisNode()\nRed=random.uniform(0,1)\nGreen=random.uniform(0,1)\nBlue=random.uniform(0,1)\nn\['Color'].setValue(\[Red,Green,Blue])\nhexColour = int('%02x%02x%02x%02x' % (Red*255,Green*255,Blue*255,1),16)\nn\['tile_color'].setValue( hexColour )"}
+ addUserKnob {26 ""}
+ addUserKnob {26 S01 l " " T " "}
+ addUserKnob {41 scaling_1 l Scale T TransformGeo2.scaling}
+ addUserKnob {41 uniform_scale l "Uniform Scale" T TransformGeo1.uniform_scale}
+ addUserKnob {26 by1 l " " T " \n"}
+ addUserKnob {26 by2 l " " T "                                                                                               "}
+ addUserKnob {26 Gat l " " -STARTLINE T "<font color=\"#1C1C1C\"> v01 - Gat - 2017"}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output "\[value render]"
+}
+ Input {
+  inputs 0
+  name InputAxis
+  xpos 268
+  ypos 996
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.Color.r} {parent.Color.g} {parent.Color.b} 0}
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant1
+  xpos 267
+  ypos 838
+  postage_stamp false
+  addUserKnob {20 User}
+  addUserKnob {7 color_red}
+  addUserKnob {7 color_blue}
+  addUserKnob {7 color_gren}
+ }
+ Cylinder {
+  inputs 0
+  rows 0
+  name Cylinder1
+  xpos 637
+  ypos 653
+ }
+ EditGeo {
+  keys {{30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59}
+    }
+  values {{-2.980219849e-09 0 -0.9999957085 -0.2079108059 0 -0.978143394 -0.4067349136 0 -0.9135414958 -0.5877827406 0 -0.8090135455 -0.7431417108 0 -0.6691276431 -0.8660217524 0 -0.4999977946 -0.9510524869 0 -0.3090156317 -0.994517684 0 -0.1045279428 -0.994517684 0 0.1045280993 -0.9510524273 0 0.3090157509 -0.8660216928 0 0.4999979734 -0.7431416512 0 0.6691278815 -0.587782681 0 0.8090136647 -0.406734854 0 0.913541615 -0.2079107165 0 0.9781435132 8.44421848e-08 0 0.9999957681 0.2079108953 0 0.9781434536 0.406735003 0 0.9135415554 0.5877828598 0 0.8090135455 0.7431417108 0 0.6691277027 0.8660217524 0 0.4999978244 0.9510524273 0 0.3090158105 0.994517684 0 0.1045279279 0.9945176244 0 -0.1045283601 0.9510524273 0 -0.3090157807 0.8660217524 0 -0.499997735 0.7431415915 0 -0.6691278219 0.5877824426 0 -0.8090137839 0.4067347646 0 -0.913541615 0.2079108655 0 -0.9781433344}
+    }
+  translate {-1.986336512e-10 1 4.023313593e-08}
+  name EditGeo1
+  xpos 637
+  ypos 677
+ }
+ TransformGeo {
+  translate {0 -1 0}
+  rotate {0 0 180}
+  scaling {{parent.TransformGeo2.scaling.x} {parent.TransformGeo2.scaling.y} {parent.TransformGeo2.scaling.z}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  pivot_translate {0 1 0}
+  name TransformGeo3
+  xpos 637
+  ypos 701
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 90 0}
+  scaling {0.2 {1+TransformGeo2.scaling.y} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereX
+  xpos 321
+  ypos 477
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  rotate {90 0 0}
+  scaling {0.2 {1+TransformGeo2.scaling.z} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereZ
+  xpos 526
+  ypos 478
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Sphere {
+  inputs 0
+  selectable false
+  rows 2
+  columns 2
+  scaling {0.2 {1+TransformGeo2.scaling.x} {scaling.x}}
+  uniform_scale {{parent.TransformGeo1.uniform_scale}}
+  name SphereY
+  xpos 426
+  ypos 476
+  addUserKnob {20 PositionPass l "Position Pass"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ MergeGeo {
+  inputs 3
+  selectable false
+  name MergeGeo1
+  xpos 426
+  ypos 540
+ }
+ Switch {
+  inputs 2
+  which {{Geo}}
+  name Switch1
+  label "\[value which]"
+  xpos 432
+  ypos 695
+ }
+ ApplyMaterial {
+  inputs 2
+  selectable false
+  name ApplyMaterial1
+  xpos 432
+  ypos 838
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  render_mode textured
+  uniform_scale {{CTRL1.size}}
+  name TransformGeo1
+  xpos 432
+  ypos 996
+ }
+set N1dfce000 [stack 0]
+ Output {
+  name Output1
+  xpos 432
+  ypos 1069
+ }
+push $N1dfce000
+ Viewer {
+  frame 152
+  frame_range 1-385
+  masking_ratio 1.85
+  name Viewer1
+  xpos 432
+  ypos 1020
+ }
+ TransformGeo {
+  inputs 0
+  selectable false
+  render_mode textured
+  uniform_scale 5
+  name TransformGeo2
+  xpos 226
+  ypos 641
+  hide_input true
+ }
+end_group
+Scene {
+ inputs 4
+ name Scene2
+ xpos -476
+ ypos 146
+}
+NoOp {
+ name CTRL1
+ tile_color 0xffff00ff
+ xpos -486
+ ypos 212
+ addUserKnob {20 User}
+ addUserKnob {7 size R 1 5}
+ size 5
+}
+Viewer {
+ frame_range 1-100
+ viewerProcess "Rec.709 (ACES)"
+ monitorOutNDISenderName "NukeX - axisConnectNew - Viewer1"
+ name Viewer1
+ xpos -486
+ ypos 236
+}
+Axis2 {
+ inputs 0
+ name Axis5
+ xpos 490
+ ypos -126
+}
+Axis {
+ inputs 0
+ translate {-138 0 0}
+ name Axis6
+ xpos 340
+ ypos -126
+}
+Axis3 {
+ inputs 0
+ translate {99.40000153 0 0}
+ name Axis7
+ xpos 640
+ ypos -126
+}
+Axis4 {
+ inputs 0
+ translate {0 -76.5 115.5}
+ name Axis8
+ xpos 790
+ ypos -126
+}
+NoOp {
+ inputs 0
+ name AxisConnect_PM
+ tile_color 0xffff00ff
+ xpos -243
+ ypos -390
+ hide_input true
+ addUserKnob {20 User l AxisConnect_PM}
+ addUserKnob {2 file l AxisToRender}
+ file /Users/g/Downloads/AxisConnect_PM-main/AxisToRender.tcl
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "" +STARTLINE T "1, Select all Axis / 2, Push:"}
+ addUserKnob {22 AxisConnect -STARTLINE T "import nuke\n\n# Get the current Nuke node (for obtaining file path from 'file' knob)\nref_node = nuke.thisNode()\n# Get the input parameters from the node\nfile = ref_node\['file'].getValue()\n\n# Path to the Group.tcl file\ngroup_file_path = file\n\n# Step 1: Create the AxisToRender nodes from the file and organize them\ndef create_axis_to_render_from_file(file):\n    # Paste the group node from the TCL file\n    nuke.nodePaste(file)\n    # Return the newly created node\n    return nuke.selectedNode()  # Returns the most recently pasted node\n\ndef organize_connect_and_scene():\n    # Step 1: Track the selected Axis nodes (including Axis4, Axis3, Axis2, Axis1, and Axis)\n    selected_nodes = \[node for node in nuke.selectedNodes() if node.Class() in \{\"Axis4\", \"Axis3\", \"Axis2\", \"Axis1\", \"Axis\"\}]\n\n    if not selected_nodes:\n        nuke.message(\"No Axis nodes selected. Please select Axis nodes to connect.\")\n        return \[]\n\n    # Step 2: Organize the Axis nodes horizontally\n    organize_nodes_horizontally(selected_nodes)\n\n    # List to store all newly created AxisToRender nodes\n    axis_to_render_nodes = \[]\n\n    # Step 3: Create and connect AxisToRender nodes below each Axis node\n    vertical_spacing = 100  # Distance between Axis and AxisToRender nodes\n    for axis in selected_nodes:\n        # Create AxisToRender node from the group file (use the global 'group_file_path')\n        group_node = create_axis_to_render_from_file(group_file_path)\n\n        # Position the AxisToRender node directly below the Axis node\n        group_node.setXYpos(axis.xpos(), axis.ypos() + vertical_spacing)\n\n        # Connect the Axis node to the AxisToRender node\n        group_node.setInput(0, axis)\n\n        # Add the new group node to the list\n        axis_to_render_nodes.append(group_node)\n\n    # Step 4: Connect all AxisToRender nodes to a Scene3D node\n    connect_to_scene3d(axis_to_render_nodes)\n\n    return axis_to_render_nodes  # Return the created AxisToRender nodes\n\ndef create_ctrl_node():\n    # Check if a node named 'CTRL' already exists\n    existing_ctrl_nodes = \[node for node in nuke.allNodes() if node\['name'].value() == 'CTRL']\n    \n    # Create a NoOp node and set a unique name\n    ctrl_node_name = 'CTRL'\n    if existing_ctrl_nodes:\n        # If a node named 'CTRL' exists, find the next available name (e.g., CTRL1, CTRL2, etc.)\n        i = 1\n        while any(node\['name'].value() == f'CTRL\{i\}' for node in nuke.allNodes()):\n            i += 1\n        ctrl_node_name = f'CTRL\{i\}'\n    \n    # Create the NoOp node with the determined name\n    ctrl_node = nuke.createNode('NoOp')\n    ctrl_node\['name'].setValue(ctrl_node_name)\n    \n    # Add a floating point slider (Double_Knob) inside the NoOp node with the name 'size'\n    size_knob = nuke.Double_Knob('size', 'size')\n    ctrl_node.addKnob(size_knob)\n    \n    # Set the min and max values of the slider\n    size_knob.setRange(1, 5)\n    \n    # Optionally, you can set a default value for the slider\n    size_knob.setValue(5)  # Default value for the slider\n    \n    # Set the color of the node to yellow (0xFFFF00FF)\n    ctrl_node\['tile_color'].setValue(0xFFFF00FF)\n    \n    return ctrl_node\n\ndef set_uniform_scale_expression(axis_to_render_nodes):\n    # Find the 'CTRL' node (or the most recent one created)\n    ctrl_node = None\n    for node in nuke.allNodes():\n        if node\['name'].value().startswith('CTRL'):\n            ctrl_node = node\n            break  # We found the first CTRL node, no need to continue\n\n    if ctrl_node:\n        # Set the expression for the 'uniform_scale' knob to reference the 'size' knob of the CTRL node\n        for axis_to_render_node in axis_to_render_nodes:\n            if 'uniform_scale' in axis_to_render_node.knobs():\n                axis_to_render_node\['uniform_scale'].setExpression(f\"\{ctrl_node.name()\}.size\")\n            else:\n                print(f\"uniform_scale knob not found in \{axis_to_render_node.name()\}\")\n    else:\n        print(\"CTRL node not found.\")\n\n# Function to organize nodes horizontally\ndef organize_nodes_horizontally(nodes):\n    # Define horizontal spacing\n    spacing = 150\n\n    # Sort nodes by their x-position to maintain relative order\n    nodes.sort(key=lambda node: node.xpos())\n\n    # Start organizing nodes horizontally\n    x_position = nodes\[0].xpos()  # Start at the x-position of the first node\n    y_position = nodes\[0].ypos()  # Keep the y-position consistent\n\n    for node in nodes:\n        node.setXYpos(int(x_position), int(y_position))\n        x_position += spacing  # Move to the right by the spacing value\n\n# Function to connect all AxisToRender nodes to a Scene3D node\ndef connect_to_scene3d(axis_to_render_nodes):\n    # Create a unique Scene3D node\n    scene_node_name = \"Scene1\"\n    i = 1\n    while any(node.Class() == \"Scene\" and node\['name'].value() == scene_node_name for node in nuke.allNodes()):\n        i += 1\n        scene_node_name = f\"Scene\{i\}\"\n\n    scene_node = nuke.createNode(\"Scene\")\n    scene_node\['name'].setValue(scene_node_name)\n\n    # Position the Scene3D node below the AxisToRender nodes\n    if axis_to_render_nodes:\n        first_axis = axis_to_render_nodes\[0]\n        scene_node.setXYpos(first_axis.xpos(), first_axis.ypos() + 200)\n\n    # Connect each AxisToRender node to the Scene3D node\n    for i, axis_to_render in enumerate(axis_to_render_nodes):\n        scene_node.setInput(i, axis_to_render)\n\n# Main function to execute the entire workflow\ndef main():\n    # Step 1: Create and organize AxisToRender nodes\n    axis_to_render_nodes = organize_connect_and_scene()\n\n    # Step 2: Only create the CTRL node if Axis nodes were selected\n    if axis_to_render_nodes:  # Check if any Axis nodes were selected\n        create_ctrl_node()\n\n    # Step 3: Set the uniform_scale expressions for the AxisToRender nodes\n    set_uniform_scale_expression(axis_to_render_nodes)\n\n# Run the combined function\nmain()\n"}
+ addUserKnob {26 ""}
+ addUserKnob {26 _0 l "" +STARTLINE T "AxisConnect_PM v1.02 by Peter Mercell / 2024\nAxisToRender by Gaetan Baldy"}
+ addUserKnob {26 _2 l "" +STARTLINE T "<a style=\"color: #999999;\"><a style=\"color: #999999;\" href=\"http://www.petermercell.com\" target=\"_blank\" rel=\"noopener\">www.petermercell.com</a>"}
+}
